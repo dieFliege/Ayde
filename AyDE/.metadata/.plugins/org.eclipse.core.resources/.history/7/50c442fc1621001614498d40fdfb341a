@@ -1,0 +1,16 @@
+package Main;
+import MySQL.ConectionDataBase;;
+
+public class Main {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		ConectionDataBase conectar = new ConectionDataBase();
+		conectar.Conectar();
+	}
+
+}
