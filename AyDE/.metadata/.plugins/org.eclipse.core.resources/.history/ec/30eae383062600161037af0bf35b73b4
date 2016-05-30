@@ -1,0 +1,87 @@
+package Vistas;
+
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.UIManager;
+
+@SuppressWarnings("serial")
+public class Menu extends JMenuBar implements ActionListener{
+
+	private Form form;
+	private JMenu menuAcciones;
+	private JPanel secondPanel;
+	
+	public Menu(Form form){
+		this.form = form;
+		menuAcciones = new JMenu("Acciones");
+		this.secondPanel = new JPanel();
+		this.construirMenuBar();
+	}
+	
+	private void construirMenuBar(){		       
+		
+		this.form.setLayout(null);              
+        
+        this.construirMenuAcciones();
+        this.add(this.menuAcciones);
+        this.setVisible(true);
+	}
+	
+	private void construirMenuAcciones(){
+		
+		//menu=new JMenu("Acciones");
+        
+        JMenuItem mi0=new JMenuItem("Cargar Horas");
+        mi0.addActionListener( this);
+        this.menuAcciones.add(mi0);
+        
+        JMenuItem mi1=new JMenuItem("Costos de proyectos");
+        mi1.addActionListener(this);
+        this.menuAcciones.add(mi1);
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		 
+		if (e.getSource() == this.menuAcciones.getItem(0)){
+			//new Costos(this.form);
+			this.form.cambiarDePanel;
+			System.out.println("Se selecciono menu de carga horas");
+		}
+		
+		if (e.getSource() == this.menuAcciones.getItem(1)){
+			//new Cargas(this.form);
+			System.out.println("Se selecciono menu de costos de proyecto");
+		}		
+	 }
+	
+	
+	public JRadioButton construirRadioButton(String nombre, int posX, int posY){
+		
+		JRadioButton radioButton = new JRadioButton(nombre);
+		
+		GridBagConstraints c = new GridBagConstraints();
+		c.weightx = 1;
+		c.anchor = GridBagConstraints.WEST;
+		c.gridx = posX;
+		c.gridy = posY;
+		c.insets = new Insets(5, 5, 5, 5);
+		
+		radioButton.setFocusPainted(false);
+		radioButton.setVisible(false);
+		
+		this.form.getPanel().add(this.secondPanel, c);
+		this.secondPanel.add(radioButton, c);
+		
+		return radioButton;
+	}
+	
+}

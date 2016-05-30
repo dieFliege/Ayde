@@ -1,0 +1,66 @@
+package Main;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import javax.swing.JOptionPane;
+
+import MySQL.ConectionDataBase;;
+
+public class Main {
+	
+	/**
+	 * @param args
+	 * @throws SQLException 
+	 */
+	public static void main(String[] args) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		SimpleDateFormat formatoDeFecha = new SimpleDateFormat("dd/mm/yyyy");
+		String fecha = "04/01/2016" ;
+		Date date = null;
+		
+		try {
+
+			date = formatoDeFecha.parse(fecha);
+			System.out.println(date);
+
+		} catch (Exception ex) {
+
+			ex.printStackTrace();
+			
+		}
+		
+		Calendar c = Calendar.getInstance();
+		String[] fechas = fecha.split("/");
+		c.set(Integer.parseInt(fechas[2]), Integer.parseInt(fechas[1]), Integer.parseInt(fechas[0]));
+		int numsemana = c.get(Calendar.WEEK_OF_MONTH);
+		
+		System.out.println(numsemana);
+		
+		/** ConectionDataBase mysql = new ConectionDataBase();
+
+	        java.sql.Connection cn= mysql.Conectar();
+
+
+	        if(cn!=null){
+
+	                JOptionPane.showMessageDialog(null, "Conectado");	
+	                mysql.imprimirTablaDeEmpleados();
+
+	                try{
+
+	                    cn.close();
+
+	                }catch(SQLException ex){
+
+	                    System.out.println("Error al desconectar "+ex);
+
+	                }
+
+	        }**/
+	        	     
+	}
+
+}
