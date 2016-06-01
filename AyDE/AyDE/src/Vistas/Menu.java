@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class Menu extends JMenuBar implements ActionListener{
@@ -44,9 +43,9 @@ public class Menu extends JMenuBar implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		 
 		if (e.getSource() == this.menuAcciones.getItem(0)){
-			//this.form.cambiarPanel(new Costos(this.form));
+			this.form.cambiarPanel(new CostPanel());
 			//Ejemplo: 
-			this.form.cambiarPanel(new JPanel());			
+			//this.form.cambiarPanel(new JPanel());			
 			System.out.println("Se selecciono menu de carga horas");
 		}
 		
@@ -54,10 +53,10 @@ public class Menu extends JMenuBar implements ActionListener{
 			//this.form.cambiarPanel(new Cargas(this.form));
 			System.out.println("Se selecciono menu de costos de proyecto");
 			//Ejemplo
-			this.form.getPanelPrincipal().removeAll();
+			/**this.form.getPanelPrincipal().removeAll();
 			this.form.getPanelPrincipal().repaint();
 			this.form.getPanelPrincipal().updateUI();
-			this.form.repaint();
+			this.form.repaint();**/
 		}		
 	 }	
 }

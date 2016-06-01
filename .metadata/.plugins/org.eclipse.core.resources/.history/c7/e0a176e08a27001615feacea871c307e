@@ -1,0 +1,71 @@
+package Vistas;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagLayout;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.UIManager;
+
+@SuppressWarnings("serial")
+public class Form extends JFrame {
+		
+	private PanelFondo panelFondo;
+	private JScrollPane panelPrincipal;
+	
+	public JScrollPane getPanelPrincipal(){
+		return this.panelPrincipal;
+	}
+	public void setPanelPrincipal(JScrollPane newPanel){
+		this.panelPrincipal = newPanel;
+	}
+	
+	public Form() {
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		
+		this.inicializar();		
+	}	
+	
+	private void construirMenuBar(){
+		
+		UIManager.put("MenuBar.background", Color.GRAY);
+        UIManager.put("Menu.foreground", Color.white);
+		
+		this.setJMenuBar(new Menu(this));
+	}
+	
+	private void inicializar(){
+		
+		this.construirMenuBar();						
+		this.inicializarPanel();
+		
+		this.setSize(500,500);
+		
+		//Centra la Ventana
+	    this.setLocationRelativeTo(null);
+		
+	    this.setTitle("Administracion de proyectos");
+		this.setVisible(true);
+							
+	}
+	
+	private void inicializarPanel(){
+		
+		this.panelFondo = new PanelFondo();
+		this.getContentPane().add(this.panelFondo,new BorderLayout());
+		//this.panelFondo.add((new CostPanel()),BorderLayout.EAST);
+	}
+	
+	public void cambiarPanel(JScrollPane newPanel){		
+		
+		this.panelFondo.removeAll();
+		this.panelFondo.add(newPanel,BorderLayout.CENTER);
+
+		this.panelFondo.repaint();
+		this.panelFondo.updateUI();
+	}
+	
+}
