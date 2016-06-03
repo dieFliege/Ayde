@@ -21,7 +21,7 @@ public class Proyecto {
 	}
 	
 	public int calcularCostoSemanal(int salario) {
-		return (int) (salario*13/12*1.3)/4;
+		return (int) ((salario*13/12)*1.3)/4;
 	}
 	
 	public int calcularCostoProyecto(){

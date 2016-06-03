@@ -43,20 +43,13 @@ public class Menu extends JMenuBar implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		 
 		if (e.getSource() == this.menuAcciones.getItem(0)){
-			this.form.cambiarPanel(new CostPanel());
-			//Ejemplo: 
-			//this.form.cambiarPanel(new JPanel());			
+			this.form.cambiarPanel(new HoursChargePanel());			
 			System.out.println("Se selecciono menu de carga horas");
 		}
 		
-		if (e.getSource() == this.menuAcciones.getItem(1)){
-			//this.form.cambiarPanel(new Cargas(this.form));
-			System.out.println("Se selecciono menu de costos de proyecto");
-			//Ejemplo
-			/**this.form.getPanelPrincipal().removeAll();
-			this.form.getPanelPrincipal().repaint();
-			this.form.getPanelPrincipal().updateUI();
-			this.form.repaint();**/
+		if (e.getSource() == this.menuAcciones.getItem(1)){			
+			this.form.cambiarPanel(new CostPanel());
+			System.out.println("Se selecciono menu de costos de proyecto");			
 		}		
 	 }	
 }

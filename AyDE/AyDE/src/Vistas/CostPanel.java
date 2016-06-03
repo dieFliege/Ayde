@@ -6,11 +6,12 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.JTableHeader;
 
 @SuppressWarnings("serial")
@@ -22,32 +23,22 @@ public class CostPanel extends JPanel{
 		
 		this.initializeAttribute();
 		this.setLayout(new GridBagLayout());
-		
-		this.construirTitulo();
+	
 		this.construirTablaCostos();
 		this.setBackground(Color.pink);
 
 		this.setPreferredSize(new Dimension(350,350));
+		
+		Border border = BorderFactory.createLineBorder(Color.black);		
+		this.setBorder(BorderFactory.createTitledBorder(border,"Tabla de costos de proyectos", TitledBorder.CENTER, TitledBorder.TOP, null, Color.black));
+		
 	}	
 	
 	private void initializeAttribute(){
 		
 		this.panelCost = new JScrollPane();
-		this.panelCost.setPreferredSize(new Dimension(200,200));
-	
-	}
-	
-	private void construirTitulo (){
-		
-		JLabel title = new JLabel("Tabla de Costos");
-		
-		GridBagConstraints c = this.position(0, 0);
-		c.anchor = GridBagConstraints.NORTH;
-		c.weighty = 1.0;
-		
-		title.setFont(new java.awt.Font("Tahoma", 0, 36));
-		this.add(title,c);
-		
+		this.panelCost.setPreferredSize(new Dimension(300,300));
+				
 	}
 	
 	private void construirTablaCostos(){
@@ -55,18 +46,19 @@ public class CostPanel extends JPanel{
 		Object[] total = new Object[2];
 		 
 		TableModel tabla = new TableModel();// definimos el objeto tableModel
-		JTable tablaDeCostos = new JTable();// creamos la instancia de la tabla
+		JTable tablaDeCostos = new JTable();// creamos la instancia de la tabla		
 		tablaDeCostos.setModel(tabla); 
 		
 		tabla.addColumn("Proyecto");
 		tabla.addColumn("Costo");	
 		
+		//Los datos se tiene que calcular segun lo que esta en la base de datos
 		total[0] = "Alfa";
 		total[1] = "$ 20000";
 		
 		//Configuraciones de fuente de la tabla
-		tablaDeCostos.getTableHeader().setReorderingAllowed(true);
-		tablaDeCostos.getColumnModel().getColumn(0).setMaxWidth(100);
+		tablaDeCostos.getTableHeader().setReorderingAllowed(false);
+		tablaDeCostos.getColumnModel().getColumn(0).setMaxWidth(150);
 		tablaDeCostos.getColumnModel().getColumn(1).setMaxWidth(150);
 		this.configurarFuenteTabla(tablaDeCostos);
 		tabla.addRow(total);		
@@ -74,7 +66,7 @@ public class CostPanel extends JPanel{
 		this.panelCost.setViewportView(tablaDeCostos);
 		
 		GridBagConstraints c = this.position(0, 1);
-		c.anchor = GridBagConstraints.NORTH;
+		c.anchor = GridBagConstraints.CENTER;
 		c.weighty = 1.0;
 		this.add(this.panelCost,c);
 				 

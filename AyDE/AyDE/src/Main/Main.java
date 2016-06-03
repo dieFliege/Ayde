@@ -16,9 +16,9 @@ public class Main {
 	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
 		
-	   Form form = new Form();	
+		Form form = new Form();	
 		
-		ConectionDataBase mysql = new ConectionDataBase();
+		/**ConectionDataBase mysql = new ConectionDataBase();
 
 	    java.sql.Connection cn= mysql.Conectar();
 
@@ -34,6 +34,6 @@ public class Main {
 	                }catch(SQLException ex){
 	                    System.out.println("Error al desconectar "+ex);
 	                }
-	        }    	     
+	        }   **/ 	     
 	}
 }

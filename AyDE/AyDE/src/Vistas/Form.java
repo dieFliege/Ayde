@@ -55,13 +55,23 @@ public class Form extends JFrame {
 
 		this.panelFondo = new PanelFondo();
 		this.setContentPane(panelFondo);
-		this.getContentPane().setLayout(new GridBagLayout());	
+		this.getContentPane().setLayout(new GridBagLayout());
+		
+		this.panelPrincipal = new JPanel();
+		GridBagConstraints c = new GridBagConstraints();
+		c.weightx = 1;
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 200;
+		c.gridy = 200;
+		c.insets = new Insets(5, 5, 5, 5);
+		this.panelFondo.add(this.panelPrincipal,c);
 		
 	}
 	
 	public void cambiarPanel(JPanel newPanel){		
 		
-		this.panelFondo.removeAll();
+		this.panelPrincipal.removeAll();
+		this.panelPrincipal.setBackground(newPanel.getBackground());
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 1;
@@ -70,10 +80,10 @@ public class Form extends JFrame {
 		c.gridy = 200;
 		c.insets = new Insets(5, 5, 5, 5);
 		
-		this.panelFondo.add(newPanel,c);
+		this.panelPrincipal.add(newPanel,c);
 
-		this.panelFondo.repaint();
-		this.panelFondo.updateUI();
+		this.panelPrincipal.repaint();
+		this.panelPrincipal.updateUI();
 	}
 	
 }
