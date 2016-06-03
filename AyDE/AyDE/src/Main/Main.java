@@ -16,7 +16,7 @@ public class Main {
 	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		//Form form = new Form();	
+	   Form form = new Form();	
 		
 		ConectionDataBase mysql = new ConectionDataBase();
 
