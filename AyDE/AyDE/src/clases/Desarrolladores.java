@@ -6,6 +6,7 @@ public class Desarrolladores extends Usuarios {
 	private int salario;
 	private float dedicacion;
 	private String puesto;
+	private Proyecto proyecto;
 	
 	public Desarrolladores() {
 	}
@@ -25,6 +26,14 @@ public class Desarrolladores extends Usuarios {
 
 	public void setLegajo(int legajo) {
 		this.legajo = legajo;
+	}
+	
+	public Proyecto getProyecto() {
+		return this.proyecto;
+	}
+
+	public void setProyecto(Proyecto p) {
+		this.proyecto = p;
 	}
 	
 	public String getPuesto() {

@@ -32,8 +32,7 @@ import MySQL.ConectionDataBase;
 public class HoursChargePanel extends JPanel {
 
 	private JPanel dataPanel;
-	private ConectionDataBase db;
-	
+	//private ConectionDataBase db;
 	private JTextField dedicacion;
 	private JComboBox<Desarrolladores> comboEmpleados;
 	private JComboBox<Proyecto> comboProyectos;

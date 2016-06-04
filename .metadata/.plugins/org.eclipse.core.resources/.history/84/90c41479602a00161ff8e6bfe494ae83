@@ -43,25 +43,12 @@ public class GestorProyectos {
 		Map<Integer,ArrayList<Desarrolladores>> mapa = this.db.obtenerDesarrolladoresPorProyecto(mes);
 		ArrayList<Desarrolladores> empleados;
 		
-					
+		
 		for (int i=0; i < this.proyectos.size(); i++){
 			
-			empleados = mapa.get(this.proyectos.get(i).getId());					
-			
-			this.proyectos.get(i).setListaDesarrolladores(empleados);	
-			
-			this.cargarEmpleadosEnProyecto(empleados,this.proyectos.get(i));
+			empleados = mapa.get(this.proyectos.get(i).getId());
+			this.proyectos.get(i).setListaDesarrolladores(empleados);			
 		}		
-	}
-	
-	private void cargarEmpleadosEnProyecto(ArrayList<Desarrolladores> empleados, Proyecto proyecto){
-		
-		for (int i=0; i < empleados.size(); i++){
-			
-			empleados.get(i).setProyecto(proyecto);				
-					
-		}	
-		
 	}
 	
 	private void conectarBaseDeDatos(){
