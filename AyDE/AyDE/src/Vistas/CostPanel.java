@@ -6,45 +6,88 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.SQLException;
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.JTableHeader;
+import clases.GestorProyectos;
 
 @SuppressWarnings("serial")
 public class CostPanel extends JPanel{
 
 	private JScrollPane panelCost;
+	private GestorProyectos gestor;
+	private JComboBox<String> comboMeses;
 	
-	public CostPanel(){
+	public CostPanel(GestorProyectos gestorProyectos) throws SQLException{
+
+		this.gestor = gestorProyectos;
 		
 		this.initializeAttribute();
 		this.setLayout(new GridBagLayout());
+		
+		//Ver si poner un filtro de meses
+		//this.construirFiltroMes();
 	
 		this.construirTablaCostos();
 		this.setBackground(Color.pink);
 
 		this.setPreferredSize(new Dimension(350,350));
 		
-		Border border = BorderFactory.createLineBorder(Color.black);		
-		this.setBorder(BorderFactory.createTitledBorder(border,"Tabla de costos de proyectos", TitledBorder.CENTER, TitledBorder.TOP, null, Color.black));
+		Border borde = BorderFactory.createLineBorder(Color.black);		
+		this.setBorder(BorderFactory.createTitledBorder(borde,"Tabla de costos de proyectos", TitledBorder.CENTER, TitledBorder.TOP, null, Color.black));
 		
 	}	
 	
 	private void initializeAttribute(){
 		
 		this.panelCost = new JScrollPane();
-		this.panelCost.setPreferredSize(new Dimension(300,300));
-				
+		this.panelCost.setPreferredSize(new Dimension(200,200));		
 	}
 	
-	private void construirTablaCostos(){
+	private void construirFiltroMes(){
 		
-		Object[] total = new Object[2];
-		 
+		Border border = LineBorder.createGrayLineBorder();
+		GridBagConstraints c = new GridBagConstraints();
+		
+		JLabel label = new JLabel("Seleccionar mes: ");
+
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setBackground(Color.white);
+		label.setOpaque(true);
+		label.setBorder(border);
+		
+		c = this.position(0, 1);
+		c.anchor = GridBagConstraints.NORTH;
+		c.weightx = 1.0;
+		label.setPreferredSize(new Dimension(150, 30));
+		this.add(label,c);
+		
+		String[] meses ={"Enero","Febrero","Marzo","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
+		comboMeses = new JComboBox<String>(meses);
+		c = this.position(1, 1);
+		
+		comboMeses.setBackground(Color.white);
+		comboMeses.setOpaque(true);
+		comboMeses.setBorder(border);
+		comboMeses.setSelectedIndex(0);// Por defecto el combo se crea con el primer elemento seleccionado		 
+						
+		comboMeses.setPreferredSize(new Dimension(150, 30));
+		c.anchor = GridBagConstraints.NORTH;
+		c.weightx = 1.0;
+		this.add(comboMeses,c);
+	}
+	
+	private void construirTablaCostos() throws SQLException{
+		
 		TableModel tabla = new TableModel();// definimos el objeto tableModel
 		JTable tablaDeCostos = new JTable();// creamos la instancia de la tabla		
 		tablaDeCostos.setModel(tabla); 
@@ -52,24 +95,36 @@ public class CostPanel extends JPanel{
 		tabla.addColumn("Proyecto");
 		tabla.addColumn("Costo");	
 		
-		//Los datos se tiene que calcular segun lo que esta en la base de datos
-		total[0] = "Alfa";
-		total[1] = "$ 20000";
+		//cargo info de proyectos
+		this.cargarDatosProyectos(tabla);
 		
 		//Configuraciones de fuente de la tabla
 		tablaDeCostos.getTableHeader().setReorderingAllowed(false);
 		tablaDeCostos.getColumnModel().getColumn(0).setMaxWidth(150);
 		tablaDeCostos.getColumnModel().getColumn(1).setMaxWidth(150);
-		this.configurarFuenteTabla(tablaDeCostos);
-		tabla.addRow(total);		
+		this.configurarFuenteTabla(tablaDeCostos);	
 		
 		this.panelCost.setViewportView(tablaDeCostos);
 		
-		GridBagConstraints c = this.position(0, 1);
+		GridBagConstraints c = this.position(0, 2);
 		c.anchor = GridBagConstraints.CENTER;
 		c.weighty = 1.0;
+		c.gridwidth=2;
 		this.add(this.panelCost,c);
 				 
+	}
+	
+	private void cargarDatosProyectos(TableModel tabla) throws SQLException{
+		
+		String[] data;
+		for (int i=0; i < this.gestor.getProyectos().size(); i++){
+			
+			data = new String[2];
+			data[0] = this.gestor.getProyectos().get(i).getNombre();
+			data[1] = "$ "+((Double)this.gestor.getProyectos().get(i).calcularCostoProyecto()).toString();
+			
+			tabla.addRow(data);
+		}		
 	}
 	
 	private GridBagConstraints position(int posX, int posY){
@@ -79,8 +134,7 @@ public class CostPanel extends JPanel{
 		c.gridy = posY;
 		c.insets = new Insets(5, 5, 5, 5);
 		
-		return c;
-		
+		return c;		
 	}
 	
 	private void configurarFuenteTabla(JTable table){

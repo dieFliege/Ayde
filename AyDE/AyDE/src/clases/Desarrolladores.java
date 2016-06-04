@@ -1,10 +1,15 @@
 package clases;
 
 public class Desarrolladores extends Usuarios {
+	private int id;
 	private int legajo;
 	private int salario;
-	private int dedicacion;
-
+	private float dedicacion;
+	private String puesto;
+	
+	public Desarrolladores() {
+	}
+	
 	public Desarrolladores(String nombre, String apellido) {
 		super(nombre, apellido);
 		
@@ -18,8 +23,16 @@ public class Desarrolladores extends Usuarios {
 		return legajo;
 	}
 
-	private void setLegajo(int legajo) {
+	public void setLegajo(int legajo) {
 		this.legajo = legajo;
+	}
+	
+	public String getPuesto() {
+		return this.puesto;
+	}
+
+	public void setPuesto(String puesto) {
+		this.puesto = puesto;
 	}
 	
 	public int getSalario() {
@@ -30,13 +43,27 @@ public class Desarrolladores extends Usuarios {
 		this.salario = salario;
 	}
 	
-	public int getDedicacionMensual() {
+	public float getDedicacionMensual() {
 		return dedicacion;
 	}
 	public void setDedicacion(int dedicacion) {
 		this.dedicacion = dedicacion;
 	}
 	
+	public void setId(int id) {
+		this.id = id;		
+	}
 	
+	public int getId() {
+		return this.id;
+	}
+	
+	public String toString(){
+		return this.getNombre();
+	}
+	
+	public double calcularCostoSemanal() {
+		return (((this.salario*13)/12)*1.3)/4;
+	}
 	
 }

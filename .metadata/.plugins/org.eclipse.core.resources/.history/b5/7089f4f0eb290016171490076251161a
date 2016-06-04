@@ -1,0 +1,51 @@
+package listener;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Date;
+
+import Vistas.HoursChargePanel;
+import clases.Desarrolladores;
+import clases.Proyecto;
+
+public class ActionListenerGuardarCambio implements ActionListener {
+
+	private HoursChargePanel panel;
+
+	public ActionListenerGuardarCambio(HoursChargePanel panel) {
+		this.panel = panel;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		try {
+			
+			this.panel.getDataBase().insertarDedicacionEmpleado( this.getIdEmpleado(), this.panel.getDedicacion().getText(), this.getFecha(), this.getIdProyecto());
+			this.panel.resetValuesComponents();
+			
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}			
+	
+	private Integer getIdEmpleado() {
+		return ((Desarrolladores) this.panel.comboEmpleados.getSelectedItem()).getId();
+	}
+
+	private Integer getIdProyecto() {
+
+		return ((Proyecto) this.panel.getComboProyectos().getSelectedItem()).getId();
+	}
+
+	private java.sql.Date getFecha() throws ParseException {
+			
+		Date fecha = new Date(); // convierte el string en util.Date
+		java.sql.Date fecha2 = new java.sql.Date(fecha.getTime()); // convierte el util.Date en sql.Date
+		
+		return fecha2;//(new SimpleDateFormat("yyyy-MM-dd").format(myDate));
+
+	}
+}

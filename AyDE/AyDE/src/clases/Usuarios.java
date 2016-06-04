@@ -4,6 +4,9 @@ public class Usuarios {
 	private String nombre;
 	private String apellido;
 	
+	public Usuarios(){
+	}
+	
 	public Usuarios(String nombre, String apellido){
 		this.setNombre(nombre);
 		this.setApellido(apellido);

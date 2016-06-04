@@ -5,76 +5,174 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
+import listener.ActionListenerGuardarCambio;
+
+import clases.Desarrolladores;
+import clases.Proyecto;
+
 import Builder.BasicComponentBuilder;
+import MySQL.ConectionDataBase;
 
 @SuppressWarnings("serial")
-public class HoursChargePanel extends JPanel{
+public class HoursChargePanel extends JPanel {
 
 	private JPanel dataPanel;
-	
-	public HoursChargePanel(){
-		
+	private ConectionDataBase db;
+	private JTextField dedicacion;
+	private JComboBox<Desarrolladores> comboEmpleados;
+	private JComboBox<Proyecto> comboProyectos;
+
+	public HoursChargePanel(ConectionDataBase db) throws SQLException {
+
+		this.db = db;
+
 		this.initializeAttribute();
 		this.setLayout(new GridBagLayout());
-		
+
 		this.construirComponentes();
+		this.contruirBotonGuardar();
+		
 		this.setBackground(Color.lightGray);
-		
 		Border border = BorderFactory.createLineBorder(Color.black);
-		this.setBorder(BorderFactory.createTitledBorder(border,"Cargar Dedicacion", TitledBorder.CENTER, TitledBorder.TOP, null, Color.BLUE));
-		
-		this.setPreferredSize(new Dimension(350,350));
-	}	
-	
-	private void initializeAttribute(){
-		
-		this.dataPanel = new JPanel();			
-		this.dataPanel.setPreferredSize(new Dimension(320,200));
-		GridBagLayout layout = new GridBagLayout();		
-		this.dataPanel.setLayout(layout);					
-	
+		this.setBorder(BorderFactory.createTitledBorder(border,
+				"Cargar Dedicacion", TitledBorder.CENTER, TitledBorder.TOP,
+				null, Color.BLUE));
+
+		this.setPreferredSize(new Dimension(350, 350));
 	}
-	
-	private void construirComponentes(){
-		
-		//BasicComponentBuilder builder = new BasicComponentBuilder(this.dataPanel);			
-		GridBagConstraints c = new GridBagConstraints();	
+
+	private void initializeAttribute() {
+
+		this.dataPanel = new JPanel();
+		this.dataPanel.setPreferredSize(new Dimension(320, 200));
+		GridBagLayout layout = new GridBagLayout();
+		this.dataPanel.setLayout(layout);
+
+	}
+
+	private void construirComponentes() throws SQLException {
+
+		GridBagConstraints c = new GridBagConstraints();
 		BasicComponentBuilder builder = new BasicComponentBuilder(this.dataPanel);
-		
-		//Fila 1
-		builder.construirLabel("Proyectos:",0,0);
-		//Se deben cargar los proyectos segun los que estan en la base de datos
-		String[] opciones = {"Alfa","Beta","Gamma","Omega","Elipson"};
-		builder.construirCombo(opciones,1,0);
-		
-		//Fila 2
-		builder.construirLabel("Dedicación semanal(%):",0,1);
-		builder.construirInputText(1,1);
-		
-		//Fila 3
-		builder.construirLabel("Perioridad:",0,2);
-		builder.construirLabel("Semanal",1,2);		
-				
+
+		// Fila 1
+		builder.construirLabel("Proyectos:", 0, 0);
+		ArrayList<Proyecto> proyectos = db.obtenerProyecto();
+		Proyecto[] opciones = new Proyecto[proyectos.size()];
+		for (int i = 0; i < proyectos.size(); i++)
+			opciones[i] = proyectos.get(i);
+		comboProyectos = builder.construirCombo(opciones, 1, 0);
+
+		// Fila 2
+		builder.construirLabel("Dedicación semanal(%):", 0, 1);
+		dedicacion = builder.construirInputText(1, 1);
+
+		// Fila 3
+		builder.construirLabel("Empleados:", 0, 2);
+		ArrayList<Desarrolladores> empleado = db.obtenerDesarrolladores();
+		Desarrolladores[] empleados = new Desarrolladores[empleado.size()];
+		for (int i = 0; i < empleado.size(); i++)
+			empleados[i] = empleado.get(i);
+		comboEmpleados = builder.construirCombo(empleados, 1, 2);
+
 		c = this.position(0, 1);
 		c.anchor = GridBagConstraints.CENTER;
-		c.weighty = 1.0;	
-		this.add(this.dataPanel,c);
-		
+		c.weighty = 1.0;
+		this.add(this.dataPanel, c);
+
 	}
 	
-	private GridBagConstraints position(int posX, int posY){
+	public void resetValuesComponents(){
 		
+		this.comboEmpleados.setSelectedIndex(0);
+		this.comboProyectos.setSelectedIndex(0);
+		this.dedicacion.setText("");
+	}
+
+	private void contruirBotonGuardar() {
+
+		// Contriur boton guardar
+		JButton buttonSave = new JButton("Guardar");
+		buttonSave.setFocusPainted(false);
+		buttonSave.setPreferredSize(new Dimension(100, 30));
+
+		ActionListenerGuardarCambio listener = new ActionListenerGuardarCambio(this);
+		buttonSave.addActionListener(listener);
+
+		ButtonGroup buttons = new ButtonGroup();
+		buttons.add(buttonSave);
+		
+		
+		GridBagConstraints c = new GridBagConstraints();
+		c = this.position(0, 2);
+		c.anchor = GridBagConstraints.CENTER;
+		//c.weighty = 1.0;
+		this.add(buttonSave, c);
+	}
+	
+	public void saveChanges() throws SQLException, ParseException{
+		this.getDataBase().insertarDedicacionEmpleado( this.getIdEmpleado(), this.getDedicacion().getText(), this.getFecha(), this.getIdProyecto());
+		this.resetValuesComponents();
+		JOptionPane.showMessageDialog(null, "Los datos fueron guardados con éxito");
+	}
+	
+	private Integer getIdEmpleado() {
+		return ((Desarrolladores) this.getComboEmpleados().getSelectedItem()).getId();
+	}
+
+	private Integer getIdProyecto() {
+
+		return ((Proyecto) this.getComboProyectos().getSelectedItem()).getId();
+	}
+
+	private java.sql.Date getFecha() throws ParseException {
+			
+		Date fecha = new Date(); // convierte el string en util.Date
+		java.sql.Date fecha2 = new java.sql.Date(fecha.getTime()); // convierte el util.Date en sql.Date
+		
+		return fecha2;//(new SimpleDateFormat("yyyy-MM-dd").format(myDate));
+
+	}
+	
+	public ConectionDataBase getDataBase() {
+		return this.db;
+	}
+
+	public JComboBox<Proyecto> getComboProyectos() {
+		return this.comboProyectos;
+	}
+
+	public JTextField getDedicacion() {
+		return this.dedicacion;
+	}
+
+	public JComboBox<Desarrolladores> getComboEmpleados() {
+		return this.comboEmpleados;
+	}
+
+	private GridBagConstraints position(int posX, int posY) {
+
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = posX;
 		c.gridy = posY;
-		c.insets = new Insets(5,5,5,5);
-		
+		c.insets = new Insets(5, 5, 5, 5);
+
 		return c;
-		
+
 	}
 }

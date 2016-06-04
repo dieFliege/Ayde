@@ -1,0 +1,171 @@
+package Vistas;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+
+import MySQL.ConectionDataBase;
+import Vistas.HoursChargePanel.ActionListenerGuardarCambios;
+
+@SuppressWarnings("serial")
+public class Form extends JFrame {
+		
+	private PanelFondo panelFondo;
+	private JPanel panelPrincipal;
+	private ConectionDataBase db;
+	private java.sql.Connection conexion;
+	
+	public ConectionDataBase getDB(){
+		return this.db;
+	}
+	
+	public java.sql.Connection getConexion(){
+		return this.conexion;
+	}
+	
+	public JPanel getPanelPrincipal(){
+		return this.panelPrincipal;
+	}
+	public void setPanelPrincipal(JPanel newPanel){
+		this.panelPrincipal = newPanel;
+	}
+	
+	public Form() {
+		
+		this.conectarBaseDeDatos();
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		this.inicializar();	
+	}	
+	
+	private void conectarBaseDeDatos(){
+	
+			this.db = new ConectionDataBase();		
+			this.conexion = db.Conectar();
+			
+			JOptionPane.showMessageDialog(null, "Conectado");
+	}
+	
+	private void desconectarBaseDeDatos(){
+		try{
+			
+            this.conexion.close();
+            
+        }catch(SQLException ex){
+        	
+            System.out.println("Error al desconectar "+ex);
+        }
+	}
+	
+	private void construirMenuBar(){
+		
+		UIManager.put("MenuBar.background", Color.GRAY);
+        UIManager.put("Menu.foreground", Color.white);
+		
+		this.setJMenuBar(new Menu(this));
+	}
+	
+	private void inicializar(){
+		
+		this.construirMenuBar();						
+		this.inicializarPanel();
+		
+		this.setSize(500,500);
+		
+		//Centra la Ventana
+	    this.setLocationRelativeTo(null);
+		
+	    this.setTitle("Administracion de proyectos");
+		this.setVisible(true);
+							
+	}
+	
+	private void construirBotonSalida(){
+		
+		JButton buttonSave = new JButton("Salida");
+		buttonSave.setFocusPainted(false);
+		buttonSave.setPreferredSize(new Dimension(100,30));
+		
+		ActionListenerSalir listener = new ActionListenerSalir(this);
+		buttonSave.addActionListener(listener);
+		
+		ButtonGroup buttons = new ButtonGroup();
+		buttons.add(buttonSave);
+		
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.CENTER;
+		c.weighty = 1.0;	
+		c.gridx = 0;
+		c.gridy = 2;
+		c.insets = new Insets(5, 5, 5, 5);
+		
+		this.add(buttonSave,c);
+	}
+	
+	private void inicializarPanel(){
+
+		this.panelFondo = new PanelFondo();
+		this.setContentPane(panelFondo);
+		this.getContentPane().setLayout(new GridBagLayout());
+		
+		this.panelPrincipal = new JPanel();
+		GridBagConstraints c = new GridBagConstraints();
+		c.weightx = 1;
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 200;
+		c.gridy = 200;
+		c.insets = new Insets(5, 5, 5, 5);
+		this.panelFondo.add(this.panelPrincipal,c);
+		
+	}
+	
+	public void cambiarPanel(JPanel newPanel){		
+		
+		this.panelPrincipal.removeAll();
+		this.panelPrincipal.setBackground(newPanel.getBackground());
+		
+		GridBagConstraints c = new GridBagConstraints();
+		c.weightx = 1;
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 200;
+		c.gridy = 200;
+		c.insets = new Insets(5, 5, 5, 5);
+		
+		this.panelPrincipal.add(newPanel,c);
+
+		this.panelPrincipal.repaint();
+		this.panelPrincipal.updateUI();
+	}
+	
+	
+	public class ActionListenerSalir implements ActionListener
+	{
+		
+	   private Form form;
+	   
+	   public ActionListenerSalir(Form form){
+		   this.form = form;
+	   }
+	   
+	   public void actionPerformed (ActionEvent e)
+	   { 
+		  this.form.desconectarBaseDeDatos();
+		  System.exit(0);
+	   }
+	}
+}

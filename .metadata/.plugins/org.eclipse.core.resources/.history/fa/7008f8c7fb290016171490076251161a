@@ -1,0 +1,36 @@
+package clases;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
+
+import MySQL.ConectionDataBase;
+
+public class GestorProyectos {
+	
+	private ArrayList<Proyecto> proyectos;
+	private ConectionDataBase db;
+	
+	
+	public GestorProyectos(ConectionDataBase db) throws SQLException{
+		
+		this.db = db;
+		this.proyectos = db.obtenerProyecto(); 
+	}
+	
+	public void cargarDesarrolladoresParaProyecto() throws SQLException{
+		
+		Map<Integer,ArrayList<Desarrolladores>> mapa = this.db.obtenerDesarrolladoresPorProyecto();
+		ArrayList<Desarrolladores> empleados;
+		
+		
+		for (int i=0; i < this.proyectos.size(); i++){
+			
+			empleados = mapa.get(this.proyectos.get(i).getId());
+			this.proyectos.get(i).setListaDesarrolladores(empleados);
+			
+		}
+		
+	}
+		
+}

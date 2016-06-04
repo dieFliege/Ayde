@@ -1,0 +1,33 @@
+package listener;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.Date;
+
+import Vistas.HoursChargePanel;
+import clases.Desarrolladores;
+import clases.Proyecto;
+
+public class ActionListenerGuardarCambio implements ActionListener {
+
+	private HoursChargePanel panel;
+
+	public ActionListenerGuardarCambio(HoursChargePanel panel) {
+		this.panel = panel;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		try {
+			
+			this.saveChanges();
+			
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}			
+		
+}

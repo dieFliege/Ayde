@@ -1,0 +1,64 @@
+package clases;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import MySQL.ConectionDataBase;
+
+public class Proyecto {
+	private String nombre;
+	private int id;
+	private ConectionDataBase db;
+	private Desarrolladores empleado;
+	ArrayList<Desarrolladores> listaDesarrolladores;
+	
+	public Proyecto( ){
+	}
+	
+	public Proyecto(String nombre){
+		this.setNombre(nombre);
+	}
+	
+	public void setListaDesarrolladores(ArrayList<Desarrolladores> empleados){
+
+		this.listaDesarrolladores = empleados;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int calcularCostoSemanal(int salario) {
+		return (int) ((salario*13/12)*1.3)/4;
+	}
+	
+	public int calcularCostoProyecto(){
+		int total = 0;
+		for(int i = 0; i< listaDesarrolladores.size(); i++){
+			total += empleado.getDedicacionMensual() * this.calcularCostoSemanal(empleado.getSalario());
+		}
+		
+		return total;
+	}
+	
+	public void agregarDesarrollador(Desarrolladores desarrollador){
+		listaDesarrolladores.add(desarrollador);
+		
+	}
+
+	public String toString(){
+		return this.getNombre();
+	}
+}

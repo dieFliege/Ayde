@@ -1,17 +1,24 @@
 package clases;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Proyecto {
 	private String nombre;
-	private Desarrolladores empleado;
-	List<Desarrolladores> listaDesarrolladores = new ArrayList<Desarrolladores>();
+	private int id;
+	ArrayList<Desarrolladores> listaDesarrolladores;
+	
+	public Proyecto( ){
+	}
 	
 	public Proyecto(String nombre){
 		this.setNombre(nombre);
 	}
+	
+	public void setListaDesarrolladores(ArrayList<Desarrolladores> empleados){
 
+		this.listaDesarrolladores = empleados;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -20,17 +27,27 @@ public class Proyecto {
 		this.nombre = nombre;
 	}
 	
-	public int calcularCostoSemanal(int salario) {
-		return (int) ((salario*13/12)*1.3)/4;
+	public int getId() {
+		return this.id;
 	}
+
+	public void setId(int id) {
+		this.id = id;
+	}	
 	
-	public int calcularCostoProyecto(){
-		int total = 0;
+	public double calcularCostoProyecto(){
+		Double total = 0.0;
+		Desarrolladores empleado;
+		
 		for(int i = 0; i< listaDesarrolladores.size(); i++){
-			total += empleado.getDedicacionMensual() * this.calcularCostoSemanal(empleado.getSalario());
+			empleado = this.listaDesarrolladores.get(i);
+			total += ((empleado.getDedicacionMensual()/100) * empleado.calcularCostoSemanal());
 		}
 		
-		return total;
+		total = (double) Math.round(total * 100);
+		total = total/100;
+		
+		return  total;
 	}
 	
 	public void agregarDesarrollador(Desarrolladores desarrollador){
@@ -38,5 +55,7 @@ public class Proyecto {
 		
 	}
 
-
+	public String toString(){
+		return this.getNombre();
+	}
 }
