@@ -17,7 +17,8 @@ public class ActionListenerActualizarCostos implements ActionListener{
 
 			try {
 				int mes = this.panel.getComboMeses().getSelectedIndex()+1;
-				this.panel.getForm().getGestor().actualizarDatos(mes);							
+				this.panel.getForm().getGestor().actualizarDatos(mes);
+							
 				this.panel.removeAll();
 				this.panel.setMesCostos(mes);
 				this.panel.start();

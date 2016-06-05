@@ -64,10 +64,6 @@ public class CostPanel extends JPanel{
 		return this.form;
 	}
 	
-	public void setForm(Form form){
-		this.form = form;
-	}
-	
 	public int getMesCostos(){
 		return this.mesCostos;
 	}

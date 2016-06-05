@@ -17,11 +17,10 @@ public class ActionListenerActualizarCostos implements ActionListener{
 
 			try {
 				int mes = this.panel.getComboMeses().getSelectedIndex()+1;
-				this.panel.getForm().getGestor().actualizarDatos(mes);							
-				this.panel.removeAll();
-				this.panel.setMesCostos(mes);
-				this.panel.start();
-				this.panel.getForm().cambiarPanel(this.panel);				
+				this.panel.getForm().getGestor().actualizarDatos(mes);
+				
+				CostPanel panelActualizado = new CostPanel(this.panel.getForm(),mes);
+				this.panel.getForm().cambiarPanel(panelActualizado);				
 				
 			} catch (SQLException e1) {
 				e1.printStackTrace();

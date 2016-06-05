@@ -52,7 +52,7 @@ public class CostPanel extends JPanel{
 		this.start();
 	}
 	
-	public void start() throws SQLException{
+	private void start() throws SQLException{
 		this.initializeAttribute();
 		this.personalizarCostPanel();
 		this.construirFiltroMes();
@@ -62,10 +62,6 @@ public class CostPanel extends JPanel{
 	
 	public Form getForm(){
 		return this.form;
-	}
-	
-	public void setForm(Form form){
-		this.form = form;
 	}
 	
 	public int getMesCostos(){

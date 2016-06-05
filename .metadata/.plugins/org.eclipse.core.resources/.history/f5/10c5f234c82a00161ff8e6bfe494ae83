@@ -3,9 +3,6 @@ package Vistas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -58,12 +55,9 @@ public class Menu extends JMenuBar implements ActionListener{
 		
 		if (e.getSource() == this.menuAcciones.getItem(1)){			
 			try {
-				
-				Calendar fecha = new GregorianCalendar();
-				int mesActual = fecha.get(Calendar.MONTH);
-				this.form.getGestor().actualizarDatos(mesActual);
-				CostPanel panel = new CostPanel(this.form,mesActual);
-				this.form.cambiarPanel(panel);
+				CostPanel panel = new CostPanel(this.form);
+				this.form.getGestor().actualizarDatos(panel.getMesCostos());
+				this.form.cambiarPanel(new CostPanel(this.form));
 				
 			} catch (SQLException e1) {
 				e1.printStackTrace();
