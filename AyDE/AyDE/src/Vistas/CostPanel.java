@@ -7,6 +7,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -18,39 +22,108 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.JTableHeader;
+
+import listener.ActionListenerActualizarCostos;
 import clases.GestorProyectos;
+import clases.Proyecto;
 
 @SuppressWarnings("serial")
 public class CostPanel extends JPanel{
 
 	private JScrollPane panelCost;
-	private GestorProyectos gestor;
 	private JComboBox<String> comboMeses;
+	private Form form;
+	private Integer mesCostos;
 	
-	public CostPanel(GestorProyectos gestorProyectos) throws SQLException{
-
-		this.gestor = gestorProyectos;
+	public CostPanel(Form form, int mes) throws SQLException{
 		
+		this.form = form;
+		this.mesCostos = mes;
+		this.start();
+	}
+	
+	public CostPanel(Form form) throws SQLException{
+
+		this.form = form;
+		
+		Calendar fecha = new GregorianCalendar();
+		this.mesCostos = fecha.get(Calendar.MONTH);
+		
+		this.start();
+	}
+	
+	private void start() throws SQLException{
 		this.initializeAttribute();
-		this.setLayout(new GridBagLayout());
-		
-		//Ver si poner un filtro de meses
-		//this.construirFiltroMes();
+		this.personalizarCostPanel();
+		this.construirFiltroMes();
+		this.cargarInformacionCostos();			
+				
+	}	
 	
-		this.construirTablaCostos();
-		this.setBackground(Color.pink);
-
-		this.setPreferredSize(new Dimension(350,350));
+	public Form getForm(){
+		return this.form;
+	}
+	
+	public int getMesCostos(){
+		return this.mesCostos;
+	}
+	
+	public void setMesCostos(int mes){
+		this.mesCostos = mes;
+	}
+	
+	private GestorProyectos getGestor(){
+		return this.form.getGestor();
+	}
+	
+	public JComboBox<String> getComboMeses(){
+		return this.comboMeses;
+	}
+	
+	private void cargarInformacionCostos() throws SQLException{
 		
+		if (this.getGestor().getProyectosActuales().isEmpty())
+			this.construirAvisoDeNoDatos();
+		else
+			this.construirTablaCostos();
+		
+	}
+	
+	private void personalizarCostPanel(){
+		this.setLayout(new GridBagLayout());
+		this.setBackground(Color.pink);
+		this.setPreferredSize(new Dimension(350,350));		
 		Border borde = BorderFactory.createLineBorder(Color.black);		
 		this.setBorder(BorderFactory.createTitledBorder(borde,"Tabla de costos de proyectos", TitledBorder.CENTER, TitledBorder.TOP, null, Color.black));
 		
-	}	
+	}
 	
 	private void initializeAttribute(){
 		
 		this.panelCost = new JScrollPane();
 		this.panelCost.setPreferredSize(new Dimension(200,200));		
+	}
+	
+	private void construirAvisoDeNoDatos(){
+		
+		Border border = LineBorder.createGrayLineBorder();
+		String texto = "<html><body>No hay datos disponibles. <br>Seleccione otro mes.</body></html>";
+
+		JLabel label = new JLabel(texto);
+
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setBackground(Color.gray);
+		label.setForeground(Color.white);
+		label.setOpaque(true);
+		label.setBorder(border);
+		label.setPreferredSize(new Dimension(200, 200));
+
+		GridBagConstraints c = this.position(0, 2);
+		c.anchor = GridBagConstraints.CENTER;
+		c.weighty = 1.0;
+		c.gridwidth=2;
+		this.add(label,c);
+
 	}
 	
 	private void construirFiltroMes(){
@@ -71,19 +144,30 @@ public class CostPanel extends JPanel{
 		label.setPreferredSize(new Dimension(150, 30));
 		this.add(label,c);
 		
+		this.construirComboMeses();
+	}
+	
+	private void construirComboMeses(){
+		
+		Border border = LineBorder.createGrayLineBorder();
+		GridBagConstraints c = new GridBagConstraints();
+		
 		String[] meses ={"Enero","Febrero","Marzo","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
 		comboMeses = new JComboBox<String>(meses);
-		c = this.position(1, 1);
 		
+		
+		comboMeses.setSelectedIndex(this.mesCostos-1);				
 		comboMeses.setBackground(Color.white);
 		comboMeses.setOpaque(true);
 		comboMeses.setBorder(border);
-		comboMeses.setSelectedIndex(0);// Por defecto el combo se crea con el primer elemento seleccionado		 
-						
+		comboMeses.addActionListener(new ActionListenerActualizarCostos(this));						
 		comboMeses.setPreferredSize(new Dimension(150, 30));
+		
+		c = this.position(1, 1);
 		c.anchor = GridBagConstraints.NORTH;
 		c.weightx = 1.0;
 		this.add(comboMeses,c);
+		
 	}
 	
 	private void construirTablaCostos() throws SQLException{
@@ -117,14 +201,19 @@ public class CostPanel extends JPanel{
 	private void cargarDatosProyectos(TableModel tabla) throws SQLException{
 		
 		String[] data;
-		for (int i=0; i < this.gestor.getProyectos().size(); i++){
-			
-			data = new String[2];
-			data[0] = this.gestor.getProyectos().get(i).getNombre();
-			data[1] = "$ "+((Double)this.gestor.getProyectos().get(i).calcularCostoProyecto()).toString();
-			
-			tabla.addRow(data);
-		}		
+		ArrayList<Proyecto> proyectos = this.getGestor().getProyectosActuales();
+		
+		if(!proyectos.isEmpty()){
+		
+			for (int i=0; i < proyectos.size(); i++){
+				
+				data = new String[2];
+				data[0] = proyectos.get(i).getNombre();
+				data[1] = "$ "+((Double)proyectos.get(i).calcularCostoProyecto()).toString();
+				
+				tabla.addRow(data);
+			}
+		}
 	}
 	
 	private GridBagConstraints position(int posX, int posY){

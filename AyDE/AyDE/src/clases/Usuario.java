@@ -1,13 +1,13 @@
 package clases;
 
-public class Usuarios {
+public class Usuario {
 	private String nombre;
 	private String apellido;
 	
-	public Usuarios(){
+	public Usuario(){
 	}
 	
-	public Usuarios(String nombre, String apellido){
+	public Usuario(String nombre, String apellido){
 		this.setNombre(nombre);
 		this.setApellido(apellido);
 	}

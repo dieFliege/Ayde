@@ -5,16 +5,17 @@ import java.util.ArrayList;
 public class Proyecto {
 	private String nombre;
 	private int id;
-	ArrayList<Desarrolladores> listaDesarrolladores;
+	ArrayList<Desarrollador> listaDesarrolladores;
 	
 	public Proyecto( ){
 	}
 	
 	public Proyecto(String nombre){
 		this.setNombre(nombre);
+		this.setListaDesarrolladores(new ArrayList<Desarrollador>());
 	}
 	
-	public void setListaDesarrolladores(ArrayList<Desarrolladores> empleados){
+	public void setListaDesarrolladores(ArrayList<Desarrollador> empleados){
 
 		this.listaDesarrolladores = empleados;
 	}
@@ -37,7 +38,7 @@ public class Proyecto {
 	
 	public double calcularCostoProyecto(){
 		Double total = 0.0;
-		Desarrolladores empleado;
+		Desarrollador empleado;
 		
 		for(int i = 0; i< listaDesarrolladores.size(); i++){
 			empleado = this.listaDesarrolladores.get(i);
@@ -50,7 +51,7 @@ public class Proyecto {
 		return  total;
 	}
 	
-	public void agregarDesarrollador(Desarrolladores desarrollador){
+	public void agregarDesarrollador(Desarrollador desarrollador){
 		listaDesarrolladores.add(desarrollador);
 		
 	}

@@ -1,0 +1,21 @@
+package listener;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import clases.GestorProyectos;
+public class ActionListenerActualizarCostos implements ActionListener{
+
+	private GestorProyectos gestor;
+	private int mesDatos;
+
+	public ActionListenerActualizarCostos(GestorProyectos gestor, int mesDatos) {
+		this.gestor = gestor;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+
+			this.gestor.actualizarDatos(mesDatos);
+	}
+	
+}

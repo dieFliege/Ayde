@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import clases.Desarrolladores;
+import clases.Desarrollador;
 import clases.Proyecto;
 
 public class ConectionDataBase {
@@ -98,10 +98,10 @@ public class ConectionDataBase {
 			stmt.close();
 		}	
 		
-		public Map<Integer,ArrayList<Desarrolladores>> obtenerDesarrolladoresPorProyecto(int mes) throws SQLException{
+		public Map<Integer,ArrayList<Desarrollador>> obtenerDesarrolladoresPorProyecto(int mes) throws SQLException{
 			
-			Map<Integer,ArrayList<Desarrolladores>> empleados = new HashMap<Integer,ArrayList<Desarrolladores>>();
-			Desarrolladores desarrollador;
+			Map<Integer,ArrayList<Desarrollador>> empleados = new HashMap<Integer,ArrayList<Desarrollador>>();
+			Desarrollador desarrollador;
 			java.sql.PreparedStatement stmt = this.connection.prepareStatement( "SELECT SUM(Dedicacion.porcentaje_dedicacion), empleados.*, Dedicacion.proyecto " +
 					"FROM Dedicacion, empleados " +
 					"WHERE empleados.id_empleado = Dedicacion.empleado and MONTH(Dedicacion.fecha_carga) = ? "+		
@@ -113,7 +113,7 @@ public class ConectionDataBase {
 			
 			while (rs.next()){
 				
-				desarrollador = new Desarrolladores();
+				desarrollador = new Desarrollador();
 				id = Integer.parseInt((rs.getString("Dedicacion.proyecto")));
 				
 				desarrollador.setId(Integer.parseInt((rs.getString("id_empleado"))));
@@ -124,7 +124,7 @@ public class ConectionDataBase {
 				desarrollador.ingresarSalario(Integer.parseInt(rs.getString("sueldo")));
 				
 				if (!empleados.keySet().contains(id)){					
-					empleados.put(id, new ArrayList<Desarrolladores>());
+					empleados.put(id, new ArrayList<Desarrollador>());
 				}
 				
 				empleados.get(id).add(desarrollador);
@@ -136,16 +136,16 @@ public class ConectionDataBase {
 			return empleados;
 		}
 		
-		public ArrayList<Desarrolladores> obtenerDesarrolladores() throws SQLException{
+		public ArrayList<Desarrollador> obtenerDesarrolladores() throws SQLException{
 			
-			ArrayList<Desarrolladores> empleados = new ArrayList<Desarrolladores>();
-			Desarrolladores desarrollador;
+			ArrayList<Desarrollador> empleados = new ArrayList<Desarrollador>();
+			Desarrollador desarrollador;
 			java.sql.PreparedStatement stmt = this.connection.prepareStatement( "SELECT * FROM empleados");
 			ResultSet rs = stmt.executeQuery();
 			
 			while (rs.next()){
 				
-				desarrollador = new Desarrolladores();
+				desarrollador = new Desarrollador();
 				
 				desarrollador.setId(Integer.parseInt((rs.getString("id_empleado"))));
 				desarrollador.setNombre((rs.getString("nombre_apellido")));
@@ -162,13 +162,10 @@ public class ConectionDataBase {
 			return empleados;
 		}
 		
-		
-		public ArrayList<Proyecto> obtenerProyecto() throws SQLException{
+		private ArrayList<Proyecto> cargaDeProyectos(java.sql.PreparedStatement stmt) throws SQLException{
 			
 			ArrayList<Proyecto> proyectos = new ArrayList<Proyecto>();
 			Proyecto proyecto;
-			java.sql.PreparedStatement stmt = this.connection.prepareStatement( "SELECT * FROM Proyecto");
-			
 			ResultSet rs = stmt.executeQuery();
 			
 			while (rs.next()){
@@ -185,6 +182,22 @@ public class ConectionDataBase {
 			stmt.close();
 			
 			return proyectos;
-		}		
+		}
+		
+		public ArrayList<Proyecto> obtenerProyectos() throws SQLException{
+						
+			java.sql.PreparedStatement stmt = this.connection.prepareStatement( "SELECT * FROM Proyecto");
+			
+			return this.cargaDeProyectos(stmt);
+		}
+		
+		public ArrayList<Proyecto> obtenerProyectosActuales(int mes) throws SQLException{
+			
+			
+			java.sql.PreparedStatement stmt = this.connection.prepareStatement( "SELECT DISTINCT Proyecto.* FROM Dedicacion, Proyecto WHERE Dedicacion.proyecto = Proyecto.id_proyecto AND MONTH(Dedicacion.fecha_carga) = ? ");						
+			stmt.setInt(1,mes);
+			
+			return this.cargaDeProyectos(stmt);
+		}	
 		
 }

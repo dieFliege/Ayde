@@ -1,0 +1,25 @@
+package Main;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import clases.Desarrollador;
+
+import Vistas.Form;
+
+public class Main {
+	
+	/**
+	 * @param args
+	 * @throws SQLException 
+	 * @throws ParseException 
+	 */
+	public static void main(String[] args) throws SQLException, ParseException {
+		// TODO Auto-generated method stub
+		//Form form = new Form();
+		Calendar fecha = new GregorianCalendar();
+		System.out.println(fecha.get(Calendar.MONTH));
+	}
+}

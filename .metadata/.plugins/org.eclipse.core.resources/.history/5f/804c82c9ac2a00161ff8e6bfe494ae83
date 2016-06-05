@@ -1,0 +1,9 @@
+package clases;
+
+public class Administrador extends Usuarios{
+	
+	public Administrador(String nombre, String apellido){
+		super(nombre, apellido);
+	}
+	
+}

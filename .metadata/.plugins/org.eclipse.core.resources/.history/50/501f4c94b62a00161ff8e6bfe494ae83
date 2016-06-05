@@ -1,0 +1,29 @@
+package listener;
+
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.text.ParseException;
+
+import Vistas.HoursChargePanel;
+
+public class ActionListenerActualizarCostos {
+
+	private GestorProyectos gestor;
+
+	public ActionListenerActualizarCostos(GestorProyectos gestor) {
+		this.gestor = gestor;
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		try {
+			
+			this.panel.saveChanges();
+			
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+}

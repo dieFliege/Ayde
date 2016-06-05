@@ -1,0 +1,85 @@
+package clases;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
+
+import MySQL.ConectionDataBase;
+
+public class GestorProyectos {
+	
+	private ArrayList<Proyecto> proyectos;
+	private ArrayList<Desarrollador> empleados;
+	private ConectionDataBase db;
+	private java.sql.Connection conexion;
+	
+	public GestorProyectos() throws SQLException{
+			
+		this.inicializar();		
+	}
+	
+	public ConectionDataBase getDB(){
+		return this.db;
+	}
+	
+	private void inicializar() throws SQLException{
+		
+		this.conectarBaseDeDatos();
+		this.proyectos = db.obtenerProyecto();
+		//HardCode el mes 1(enero) deberia ir el mes actual
+		this.cargarDesarrolladoresParaProyecto(1);
+	}
+	
+	public java.sql.Connection getConexion(){
+		return this.conexion;
+	}
+	
+	public ArrayList<Proyecto> getProyectos(){
+		return this.proyectos;
+	}
+	
+	public void cargarDesarrolladoresParaProyecto(int mes) throws SQLException{
+		
+		//Esta hardcodeado para que traiga solo los del mes de enero
+		Map<Integer,ArrayList<Desarrollador>> mapa = this.db.obtenerDesarrolladoresPorProyecto(mes);
+		ArrayList<Desarrollador> empleados;
+		
+					
+		for (int i=0; i < this.proyectos.size(); i++){
+			
+			empleados = mapa.get(this.proyectos.get(i).getId());					
+			
+			this.proyectos.get(i).setListaDesarrolladores(empleados);	
+			
+			this.cargarEmpleadosEnProyecto(empleados,this.proyectos.get(i));
+		}		
+	}
+	
+	private void cargarEmpleadosEnProyecto(ArrayList<Desarrollador> empleados, Proyecto proyecto){
+		
+		for (int i=0; i < empleados.size(); i++){
+			
+			empleados.get(i).setProyecto(proyecto);									
+		}			
+	}
+	
+	private void conectarBaseDeDatos(){
+		
+		this.db = new ConectionDataBase();		
+		this.conexion = db.Conectar();
+		
+		//JOptionPane.showMessageDialog(null, "Conectado");
+	}
+	
+	public void desconectarBaseDeDatos(){
+		try{
+			
+            this.conexion.close();
+            
+        }catch(SQLException ex){
+        	
+            System.out.println("Error al desconectar ");
+        }
+	}
+		
+}

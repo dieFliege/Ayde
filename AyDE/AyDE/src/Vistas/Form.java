@@ -85,8 +85,6 @@ public class Form extends JFrame {
 		buttons.add(buttonExit);
 		
 		GridBagConstraints c = new GridBagConstraints();
-		//c.anchor = GridBagConstraints.CENTER;
-		//c.weighty = 1.0;	
 		c.gridx = 0;
 		c.gridy = 2;
 		c.insets = new Insets(5, 5, 5, 5);

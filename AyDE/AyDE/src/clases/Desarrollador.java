@@ -1,6 +1,6 @@
 package clases;
 
-public class Desarrolladores extends Usuarios {
+public class Desarrollador extends Usuario {
 	private int id;
 	private int legajo;
 	private int salario;
@@ -8,14 +8,14 @@ public class Desarrolladores extends Usuarios {
 	private String puesto;
 	private Proyecto proyecto;
 	
-	public Desarrolladores() {
+	public Desarrollador() {
 	}
 	
-	public Desarrolladores(String nombre, String apellido) {
+	public Desarrollador(String nombre, String apellido) {
 		super(nombre, apellido);
 		
 	}
-	public Desarrolladores(String nombre, String apellido, int legajo){
+	public Desarrollador(String nombre, String apellido, int legajo){
 		super(nombre, apellido);
 		this.setLegajo(legajo);	
 	}

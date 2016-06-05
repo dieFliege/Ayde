@@ -3,7 +3,6 @@ package Vistas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -46,7 +45,8 @@ public class Menu extends JMenuBar implements ActionListener{
 		 
 		if (e.getSource() == this.menuAcciones.getItem(0)){
 			try {				
-				this.form.cambiarPanel(new HoursChargePanel(this.form.getGestor().getDB()));
+				this.form.cambiarPanel(new HoursChargePanel(this.form.getGestor()));			
+			
 			} catch (SQLException e1) {
 				System.out.println(e1);
 			}			
@@ -55,7 +55,8 @@ public class Menu extends JMenuBar implements ActionListener{
 		
 		if (e.getSource() == this.menuAcciones.getItem(1)){			
 			try {
-				this.form.cambiarPanel(new CostPanel(this.form.getGestor()));
+				this.form.cambiarPanel(new CostPanel(this.form));
+				
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}

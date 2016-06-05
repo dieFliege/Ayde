@@ -2,15 +2,19 @@ package clases;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Map;
 
 import MySQL.ConectionDataBase;
 
 public class GestorProyectos {
 	
+	private ArrayList<Proyecto> proyectosActuales;
 	private ArrayList<Proyecto> proyectos;
+	private ArrayList<Desarrollador> empleados;
 	private ConectionDataBase db;
-	private java.sql.Connection conexion;
+	private java.sql.Connection conexion;	
 	
 	public GestorProyectos() throws SQLException{
 			
@@ -24,44 +28,42 @@ public class GestorProyectos {
 	private void inicializar() throws SQLException{
 		
 		this.conectarBaseDeDatos();
-		this.proyectos = db.obtenerProyecto();
-		//HardCode el mes 1(enero) deberia ir el mes actual
-		this.cargarDesarrolladoresParaProyecto(1);
+		this.setEmpleados(this.db.obtenerDesarrolladores());
+		this.setProyectos(this.db.obtenerProyectos());
+		
+		Calendar fecha = new GregorianCalendar();
+		int mesActual = fecha.get(Calendar.MONTH) + 1;
+		this.proyectosActuales = this.db.obtenerProyectosActuales(mesActual);		
+		this.cargarDesarrolladoresParaProyecto(mesActual);
 	}
 	
 	public java.sql.Connection getConexion(){
 		return this.conexion;
 	}
 	
-	public ArrayList<Proyecto> getProyectos(){
-		return this.proyectos;
+	public ArrayList<Proyecto> getProyectosActuales(){
+		return this.proyectosActuales;
 	}
 	
 	public void cargarDesarrolladoresParaProyecto(int mes) throws SQLException{
 		
 		//Esta hardcodeado para que traiga solo los del mes de enero
-		Map<Integer,ArrayList<Desarrolladores>> mapa = this.db.obtenerDesarrolladoresPorProyecto(mes);
-		ArrayList<Desarrolladores> empleados;
-		
+		Map<Integer,ArrayList<Desarrollador>> mapa = this.db.obtenerDesarrolladoresPorProyecto(mes);
+		ArrayList<Desarrollador> desarrolladores;
 					
-		for (int i=0; i < this.proyectos.size(); i++){
+		for (int i=0; i < this.proyectosActuales.size(); i++){
 			
-			empleados = mapa.get(this.proyectos.get(i).getId());					
-			
-			this.proyectos.get(i).setListaDesarrolladores(empleados);	
-			
-			this.cargarEmpleadosEnProyecto(empleados,this.proyectos.get(i));
+			desarrolladores = mapa.get(this.proyectosActuales.get(i).getId());					
+			this.proyectosActuales.get(i).setListaDesarrolladores(desarrolladores);	
+			this.cargarEmpleadosEnProyecto(desarrolladores,this.proyectosActuales.get(i));
 		}		
 	}
 	
-	private void cargarEmpleadosEnProyecto(ArrayList<Desarrolladores> empleados, Proyecto proyecto){
+	private void cargarEmpleadosEnProyecto(ArrayList<Desarrollador> desarrolladores, Proyecto proyecto){
 		
-		for (int i=0; i < empleados.size(); i++){
-			
-			empleados.get(i).setProyecto(proyecto);				
-					
-		}	
-		
+			for (int i=0; desarrolladores != null && i < desarrolladores.size(); i++){				
+				desarrolladores.get(i).setProyecto(proyecto);									
+			}			
 	}
 	
 	private void conectarBaseDeDatos(){
@@ -73,14 +75,35 @@ public class GestorProyectos {
 	}
 	
 	public void desconectarBaseDeDatos(){
-		try{
-			
+		try{			
             this.conexion.close();
             
-        }catch(SQLException ex){
-        	
+        }catch(SQLException ex){        	
             System.out.println("Error al desconectar ");
         }
+	}
+	
+	public void actualizarDatos(int mes) throws SQLException{
+		
+		this.proyectosActuales = this.db.obtenerProyectosActuales(mes);		
+		this.cargarDesarrolladoresParaProyecto(mes);
+
+	}
+
+	public ArrayList<Desarrollador> getEmpleados() {
+		return empleados;
+	}
+
+	public void setEmpleados(ArrayList<Desarrollador> empleados) {
+		this.empleados = empleados;
+	}
+
+	public ArrayList<Proyecto> getProyectos() {
+		return proyectos;
+	}
+
+	public void setProyectos(ArrayList<Proyecto> proyectos) {
+		this.proyectos = proyectos;
 	}
 		
 }
