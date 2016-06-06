@@ -1,0 +1,23 @@
+package clases;
+
+class FormatoTabla extends DefaultTableCellRenderer
+{  
+    @Override
+    public Component getTableCellRendererComponent(JTable jTable1,Object value,boolean selected, boolean focused, int row, int column)
+    { 
+        super.getTableCellRendererComponent(jTable1, value, selected, focused, row, column);
+        if ((jTable1.getValueAt(row,11)).equals("31"))
+        {
+            this.setOpaque(true);
+            this.setBackground(Color.ORANGE);
+            this.setForeground(Color.BLACK);
+        } else{
+            if ((jTable1.getValueAt(row,11)).equals("7"))
+            {
+                this.setOpaque(true);
+                this.setBackground(Color.GREEN);
+                this.setForeground(Color.BLACK);
+            }
+        }
+    }
+}

@@ -1,0 +1,27 @@
+package clases;
+
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+
+class FormatoTabla extends DefaultTableCellRenderer
+{  
+    @Override
+    public Component getTableCellRendererComponent(JTable jTable1,Object value,boolean selected, boolean focused, int row, int column)
+    { 
+        super.getTableCellRendererComponent(jTable1, value, selected, focused, row, column);
+        if ("Lamda".equals((jTable1.getValueAt(row,column)))) 
+        {
+            this.setOpaque(true);
+            this.setBackground(Color.ORANGE);
+            this.setForeground(Color.BLACK);
+        } else{
+        	
+                this.setOpaque(true);
+                this.setBackground(Color.GREEN);
+                this.setForeground(Color.BLACK);
+        }
+    }
+}

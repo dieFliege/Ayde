@@ -72,7 +72,7 @@ public class ConectionDataBase {
 		public void insertarDedicacionEmpleado(Integer idEmpleado, String dedicacion,Date date,Integer id_proyecto) throws SQLException{
 			
 			try{
-				java.sql.PreparedStatement stmt = this.connection.prepareStatement("INSERT INTO Dedicacion (empleado, porcentaje_dedicacion, fecha_carga, proyecto) VALUES (?, ?, ?, ?)");
+				java.sql.PreparedStatement stmt = this.connection.prepareStatement("INSERT INTO Dedicacion (empleado, porcentaje_dedicacion, fecha_desde, proyecto) VALUES (?, ?, ?, ?)");
 				stmt.setInt(1,idEmpleado);
 				stmt.setInt(2,Integer.parseInt(dedicacion.toString()));
 				stmt.setDate(3,date);
@@ -104,7 +104,7 @@ public class ConectionDataBase {
 			Desarrollador desarrollador;
 			java.sql.PreparedStatement stmt = this.connection.prepareStatement( "SELECT SUM(Dedicacion.porcentaje_dedicacion), empleados.*, Dedicacion.proyecto " +
 					"FROM Dedicacion, empleados " +
-					"WHERE empleados.id_empleado = Dedicacion.empleado and MONTH(Dedicacion.fecha_carga) = ? "+		
+					"WHERE empleados.id_empleado = Dedicacion.empleado and MONTH(Dedicacion.fecha_desde) = ? "+		
 					"GROUP BY Dedicacion.proyecto, empleados.id_empleado");
 			
 			stmt.setInt(1,mes);
@@ -194,7 +194,7 @@ public class ConectionDataBase {
 		public ArrayList<Proyecto> obtenerProyectosActuales(int mes) throws SQLException{
 			
 			
-			java.sql.PreparedStatement stmt = this.connection.prepareStatement( "SELECT DISTINCT Proyecto.* FROM Dedicacion, Proyecto WHERE Dedicacion.proyecto = Proyecto.id_proyecto AND MONTH(Dedicacion.fecha_carga) = ? ");						
+			java.sql.PreparedStatement stmt = this.connection.prepareStatement( "SELECT DISTINCT Proyecto.* FROM Dedicacion, Proyecto WHERE Dedicacion.proyecto = Proyecto.id_proyecto AND MONTH(Dedicacion.fecha_desde) = ? ");						
 			stmt.setInt(1,mes);
 			
 			return this.cargaDeProyectos(stmt);

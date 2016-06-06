@@ -36,7 +36,7 @@ public class Proyecto {
 		this.id = id;
 	}	
 	
-	public double calcularCostoProyecto(){
+	public Integer calcularCostoProyecto(){
 		Double total = 0.0;
 		Desarrollador empleado;
 		
@@ -45,10 +45,7 @@ public class Proyecto {
 			total += ((empleado.getDedicacionMensual()/100) * empleado.calcularCostoSemanal());
 		}
 		
-		total = (double) Math.round(total * 100);
-		total = total/100;
-		
-		return  total;
+		return (int) (Math.round(total)) ;
 	}
 	
 	public void agregarDesarrollador(Desarrollador desarrollador){
@@ -58,5 +55,10 @@ public class Proyecto {
 
 	public String toString(){
 		return this.getNombre();
+	}
+	
+	public boolean esCapacitacion(){
+		
+	return false;
 	}
 }

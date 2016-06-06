@@ -178,8 +178,8 @@ public class CostPanel extends JPanel{
 		
 		TableModel tabla = new TableModel();// definimos el objeto tableModel
 		JTable tablaDeCostos = new JTable();// creamos la instancia de la tabla		
-		tablaDeCostos.setModel(tabla); 
-		
+		tablaDeCostos.setDefaultRenderer(Object.class, new FormatoTablaCostos());
+		tablaDeCostos.setModel(tabla);
 		tabla.addColumn("Proyecto");
 		tabla.addColumn("Costo");	
 		
@@ -189,7 +189,7 @@ public class CostPanel extends JPanel{
 		//Configuraciones de fuente de la tabla
 		tablaDeCostos.getTableHeader().setReorderingAllowed(false);
 		tablaDeCostos.getColumnModel().getColumn(0).setMaxWidth(150);
-		tablaDeCostos.getColumnModel().getColumn(1).setMaxWidth(150);
+		tablaDeCostos.getColumnModel().getColumn(1).setMaxWidth(150);		
 		this.configurarFuenteTabla(tablaDeCostos);	
 		
 		this.panelCost.setViewportView(tablaDeCostos);
@@ -204,16 +204,16 @@ public class CostPanel extends JPanel{
 	
 	private void cargarDatosProyectos(TableModel tabla) throws SQLException{
 		
-		String[] data;
+		Object[] data;
 		ArrayList<Proyecto> proyectos = this.getGestor().getProyectosActuales();
 		
 		if(!proyectos.isEmpty()){
 		
 			for (int i=0; i < proyectos.size(); i++){
 				
-				data = new String[2];
-				data[0] = proyectos.get(i).getNombre();
-				data[1] = "$ "+((Double)proyectos.get(i).calcularCostoProyecto()).toString();
+				data = new Object[2];
+				data[0] = proyectos.get(i);//.textToTable();
+				data[1] = "$ "+((Integer)proyectos.get(i).calcularCostoProyecto()).toString();
 				
 				tabla.addRow(data);
 			}
