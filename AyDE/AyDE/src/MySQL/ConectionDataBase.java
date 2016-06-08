@@ -72,11 +72,12 @@ public class ConectionDataBase {
 		public void insertarDedicacionEmpleado(Integer idEmpleado, String dedicacion,Date date,Integer id_proyecto) throws SQLException{
 			
 			try{
-				java.sql.PreparedStatement stmt = this.connection.prepareStatement("INSERT INTO Dedicacion (empleado, porcentaje_dedicacion, fecha_desde, proyecto) VALUES (?, ?, ?, ?)");
+				java.sql.PreparedStatement stmt = this.connection.prepareStatement("INSERT INTO Dedicacion (empleado, porcentaje_dedicacion, fecha_desde, fecha_hasta, proyecto) VALUES (?, ?, ?, ?,?)");
 				stmt.setInt(1,idEmpleado);
 				stmt.setInt(2,Integer.parseInt(dedicacion.toString()));
 				stmt.setDate(3,date);
-				stmt.setInt(4,id_proyecto);
+				stmt.setDate(4,date);
+				stmt.setInt(5,id_proyecto);				
 				
 				stmt.executeUpdate();
 				
@@ -174,6 +175,8 @@ public class ConectionDataBase {
 				
 				proyecto.setNombre((rs.getString("nombre")));
 				proyecto.setId(Integer.parseInt(rs.getString("id_proyecto")));
+				String bool = rs.getString("capacitacion");
+				proyecto.setCapacitacion(Boolean.parseBoolean(rs.getString("capacitacion")));
 				
 				proyectos.add(proyecto);
 			}

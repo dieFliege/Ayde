@@ -60,7 +60,7 @@ public class Menu extends JMenuBar implements ActionListener{
 			try {
 				
 				Calendar fecha = new GregorianCalendar();
-				int mesActual = fecha.get(Calendar.MONTH);
+				int mesActual = fecha.get(Calendar.MONTH)+1;
 				this.form.getGestor().actualizarDatos(mesActual);
 				CostPanel panel = new CostPanel(this.form,mesActual);
 				this.form.cambiarPanel(panel);

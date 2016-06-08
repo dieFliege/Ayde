@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Proyecto {
 	private String nombre;
 	private int id;
+	private boolean capacitacion;
 	ArrayList<Desarrollador> listaDesarrolladores;
 	
 	public Proyecto( ){
@@ -59,6 +60,10 @@ public class Proyecto {
 	
 	public boolean esCapacitacion(){
 		
-	return false;
+	return this.capacitacion;
+	}
+
+	public void setCapacitacion(boolean bool) {
+		this.capacitacion=bool;
 	}
 }

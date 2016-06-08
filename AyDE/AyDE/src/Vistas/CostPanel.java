@@ -47,7 +47,7 @@ public class CostPanel extends JPanel{
 		this.form = form;
 		
 		Calendar fecha = new GregorianCalendar();
-		this.mesCostos = fecha.get(Calendar.MONTH);
+		this.mesCostos = fecha.get(Calendar.MONTH)+1;
 		
 		this.start();
 	}
@@ -156,16 +156,15 @@ public class CostPanel extends JPanel{
 		Border border = LineBorder.createGrayLineBorder();
 		GridBagConstraints c = new GridBagConstraints();
 		
-		String[] meses ={"Enero","Febrero","Marzo","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
+		String[] meses ={"Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
 		comboMeses = new JComboBox<String>(meses);
-		
-		
-		comboMeses.setSelectedIndex(this.mesCostos-1);				
+								
 		comboMeses.setBackground(Color.white);
 		comboMeses.setOpaque(true);
 		comboMeses.setBorder(border);
+		comboMeses.setSelectedIndex( this.mesCostos - 1);
 		comboMeses.addActionListener(new ActionListenerActualizarCostos(this));						
-		comboMeses.setPreferredSize(new Dimension(150, 30));
+		comboMeses.setPreferredSize(new Dimension(150, 30));	
 		
 		c = this.position(1, 1);
 		c.anchor = GridBagConstraints.NORTH;
